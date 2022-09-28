@@ -1,0 +1,116 @@
+from random import randint
+#Ввод матрицы
+print('Введите количество столбцов: ')
+x = int(input())
+print('Введите количетво строк: ')
+y = int(input())
+a = [[randint(1,10) for i in range (y)] for j in range(x)]
+print('Матрица А')
+for i in range (len(a)):
+    print(a[i])
+print()
+#Ввод второй матрицы для умножения
+print('Введите количество столбцов: ')
+x = int(input())
+print('Введите количетво строк: ')
+y = int(input())
+c = [[randint(1,10) for i in range (y)] for j in range(x)]
+print('Матрица В')
+for i in range (len(c)):
+    print(c[i])
+print()
+
+M = [[0] * x for i in range(y)]
+#Транспонирование матрицы
+print('Транспонированная матрица А')
+for i in range(len(a)):
+    for j in range(len(a[0])):
+        M[i][j] = a [j][i]
+for k in range(len(M)):
+    print(M[k])
+print()
+#Умножение матрицы
+length = len(a)
+result_matrix = [[0 for i in range(length)] for i in range(length)]
+for i in range(length):
+  for j in range(length):
+    for k in range(length):
+       result_matrix[i][j] += a[i][k] * c[k][j]
+
+print('Умножение матрицы А на матрицу В')
+for m in range (len(result_matrix)):
+    print(result_matrix[m])
+print()
+
+#Вычисление ранга матрицы
+from random import randint
+a = [[randint(1,2) for i in range (3)] for j in range(3)]
+print('Матрица А')
+for i in range (len(a)):
+    print(a[i])
+print()
+M = [0 * 3 for i in range(3)]
+
+rank = 0
+for i in range (len(a)):
+    for j in range (len(a)):
+        if a[i][j] != 0:
+            rank = 1
+        if (a[1][1]*a[2][2] - a[1][2]*a[2][1] != 0) or (a[1][0]*a[2][2] - a[1][2]*a[2][0] != 0) or (a[1][0]*a[2][1] - a[1][1]*a[2][0] != 0) or (a[0][1]*a[2][2] - a[0][2]*a[2][1] != 0) or (a[0][0]*a[2][2] - a[0][2]*a[2][0] != 0) or (a[0][0]*a[2][1] - a[0][1]*a[2][0] != 0) or (a[0][1]*a[1][2] - a[0][2]*a[1][1] != 0) or (a[0][0]*a[1][2] - a[0][2]*a[1][0] != 0) or (a[0][0]*a[1][1] - a[0][1]*a[1][0] != 0):
+            rank = 2
+        if a[0][0]*a[1][1]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[1][0]*a[2][1]*a[0][2] - a[0][2]*a[1][1]*a[2][0] - a[1][0]*a[0][1]*a[2][2] - a[0][0]*a[1][2]*a[2][1] != 0:
+            rank = 3
+if rank == 0:
+    print('Ранг матрицы нельзя вычислить')
+if rank == 1 or rank == 2 or rank == 3:
+    print(a,rank)
+    
+#Возведение матрицы в -1 степень и замер времени
+from random import randint
+import time
+start = time.time()
+a = [[randint(1,10) for i in range (3)] for j in range(3)]
+print('Матрица А')
+for i in range (len(a)):
+    print(a[i])
+print()
+M = [[0] * 3 for i in range(3)]
+det = a[0][0]*a[1][1]*a[2][2] + a[0][1]*a[1][2]*a[2][0] + a[1][0]*a[2][1]*a[0][2] - a[0][2]*a[1][1]*a[2][0] - a[1][0]*a[0][1]*a[2][2] - a[0][0]*a[1][2]*a[2][1]
+el1 = a[1][1]*a[2][2] - a[1][2]*a[2][1]
+el2 = -(a[1][0]*a[2][2] - a[1][2]*a[2][0])
+el3 = (a[1][0]*a[2][1] - a[1][1]*a[2][0])
+el4 = -(a[0][1]*a[2][2] - a[0][2]*a[2][1])
+el5 = a[0][0]*a[2][2] - a[0][2]*a[2][0]
+el6 = -(a[0][0]*a[2][1] - a[0][1]*a[2][0])
+el7 = a[0][1]*a[1][2] - a[0][2]*a[1][1]
+el8 = -(a[0][0]*a[1][2] - a[0][2]*a[1][0])
+el9 = a[0][0]*a[1][1] - a[0][1]*a[1][0]
+massminor = [[el1,el2,el3],[el4,el5,el6],[el7,el8,el9]]
+for i in range(len(massminor)):
+    for j in range(len(massminor[0])):
+        M[i][j] = massminor[j][i]
+for i in range(len(M)):
+    for j in range (len(M[0])):
+        M[i][j] = 1/det * M[i][j]
+print('Матрица в -1 степени:')
+for i in range(len(M)):
+    print(M[i])
+end = time.time()
+print("Время", end-start)
+
+#Все те же функции но через NumPy
+import numpy as np
+
+matrix = np.array([1,2,3],
+                  [4,5,6],
+                  [7,8,9])
+print("Матрица M:", matrix)
+
+matrix2 = np.transpose(matrix)
+print("Транспонирование матрицы M:", matrix2)
+
+print("Умножение матриц:", np.dot(matrix, matrix2), sep='\n')
+
+print("Ранг матрицы M:", np.linalg.matrix_rank(matrix))
+
+print(np.linalg.inv(a))
