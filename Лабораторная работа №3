@@ -1,0 +1,48 @@
+#2 Задание
+
+#Сложность O(3n)
+from random import randint
+n = int(input())
+mass = [[randint(1,10)] for i in range (n)] #n операций
+mass1 = [[randint(10,20)] for i in range (n)] #еще n операций
+mass2 = [[randint(20,30)] for i in range (n)] #3n операций
+print(mass)
+print(mass1)
+print(mass2)
+print(max(mass))
+print(max(mass1))
+print(max(mass2))
+
+#Сложность O(n!)
+
+
+#Cложность O(nlogn)
+from random import randint
+a = int(input())
+mass = [randint(1,100) for i in range (a)]
+mass.sort()
+print(mass)
+n = int(input())
+for i in range (n):
+    value = int(input())
+    mid = len(mass) // 2
+    low = 0
+    high = len(mass) - 1
+    while mass[mid] != value and low <= high:
+        if value > mass[mid]:
+            low = mid + 1
+        else:
+            high = mid - 1
+        mid = (low + high) // 2
+    if low > high:
+    
+#Сложность n^3
+woc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' # n - количество элементов в строке
+count = 0
+for l1 in woc:
+    for l2 in woc:
+        for l3 in woc:
+            word = l1+l2+l3
+            print(word)
+            count+=1
+print(count)
