@@ -35,6 +35,9 @@ for i in range (n):
             high = mid - 1
         mid = (low + high) // 2
     if low > high:
+     print('Нет индекса')
+    else:
+        print('ID =', mid)
     
 #Сложность n^3
 woc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' # n - количество элементов в строке
