@@ -1,3 +1,43 @@
+#1 Задание
+
+import random
+m = []
+m2 = []
+kolvo_el = random.randint(1,101)
+for i in range(kolvo_el):
+    element = 0
+    element = random.randint(0,101)
+    m.append(element)
+print(m)
+
+m2 = []
+import timeit
+start1 = timeit.timeit()
+m2 = m.sort
+end1 = timeit.timeit()
+
+b = 0
+a = 0
+schet = 1
+
+start2 = timeit.timeit()
+while schet != 0:
+    schet = 0
+    for i in range(len(m)-1):
+        if m[i] > m[i+1]:
+            a = m[i]
+            b = m[i+1]
+            m.pop(i)
+            m.insert(i, b)
+            m.pop(i+1)
+            m.insert(i+1, a)
+            schet += 1
+end2 = timeit.timeit()
+
+print(m)
+print(f"скорость выполнения собственного алгоритма = {end2 - start2}")
+print(f"скорость выполнения метода sort() = {end1 - start1}")
+
 #2 Задание
 
 #Сложность O(3n)
