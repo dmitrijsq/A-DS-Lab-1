@@ -89,3 +89,23 @@ for l1 in woc:
             print(word)
             count+=1
 print(count)
+
+#Сложность n!(рекурсивная сложность - поиск всех перестановок чисел)
+
+def swap(data, i, j):
+    temp = data[i]
+    data[i] = data[j]
+    data[j] = temp
+
+def factorial(data, ind = 0):
+    if ind == len(data) - 1:
+        print(''.join(data))
+
+    for i in range(ind, len(data)):
+        swap(data, ind, i)
+        factorial(data, ind + 1)
+        swap(data, ind, i)
+
+A = '123'
+factorial(list(A))
+print()
