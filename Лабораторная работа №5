@@ -1,0 +1,150 @@
+#матричный лабиринт
+a = [
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], # исходная матрица
+    [1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0 ,0, 0, 0, 1, 0, 1, 1, 1, 1],
+    [1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0 ,0, 0, 0, 1, 0, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0 ,0, 0, 0, 1, 1, 1, 1, 1, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0 ,0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+]
+
+start = 1, 1 #точки старта и выхода из лабиринта
+end = 2, 5
+
+
+m = [] #создаем вспомогательную матрицу и устанавливаем точку старта
+for i in range(len(a)):
+    m.append([])
+    for j in range(len(a[i])):
+        m[-1].append(0)
+i,j = start
+m[i][j] = 1
+
+
+def make_step(k): # cоздаем функцию для одного шага: на вход даем количество шагов к, сканируем матрицу, если находится число, которое соответствует кол-ву шагов, смотрим на ячейки вокруг, если нет числа и стены, ставим к+1 ячейке
+  for i in range(len(m)):
+    for j in range(len(m[i])):
+      if m[i][j] == k:
+        if i>0 and m[i-1][j] == 0 and a[i-1][j] == 0:
+          m[i-1][j] = k + 1
+        if j>0 and m[i][j-1] == 0 and a[i][j-1] == 0:
+          m[i][j-1] = k + 1
+        if i<len(m)-1 and m[i+1][j] == 0 and a[i+1][j] == 0:
+          m[i+1][j] = k + 1
+        if j<len(m[i])-1 and m[i][j+1] == 0 and a[i][j+1] == 0:
+           m[i][j+1] = k + 1
+
+k = 0 #заполняем вспомогательную матрицу пока не будет заполнена точка финиша.
+while m[end[0]][end[1]] == 0:
+    k += 1
+    make_step(k)
+
+
+i, j = end #далее ищем кратчайший путь, идем в точку финиша, здесь число К, далее идем в соседнюю ячейку, со значением к-1, уменьшить к на единицу и делать это до тех пор, пока к не станет равно 1
+k = m[i][j]
+the_path = [(i,j)]
+while k > 1:
+  if i > 0 and m[i - 1][j] == k-1:
+    i, j = i-1, j
+    the_path.append((i, j))
+    k-=1
+  elif j > 0 and m[i][j - 1] == k-1:
+    i, j = i, j-1
+    the_path.append((i, j))
+    k-=1
+  elif i < len(m) - 1 and m[i + 1][j] == k-1:
+    i, j = i+1, j
+    the_path.append((i, j))
+    k-=1
+  elif j < len(m[i]) - 1 and m[i][j + 1] == k-1:
+    i, j = i, j+1
+    the_path.append((i, j))
+    k -= 1
+
+print(the_path) # получаем координаты пути
+
+
+#поиск в глубину
+def deepsearch(graph, start, visited=None):
+    if visited is None:
+        visited = set()
+    visited.add(start)
+
+    print(start)
+
+    for next in graph[start] - visited:
+        deepsearch(graph, next, visited)
+    return visited
+
+
+graph = {'A': set(['B', 'C']),
+         'B': set(['A', 'D', 'E']),
+         'C': set(['A']),
+         'D': set(['B']),
+         'E': set(['C', 'D'])}
+
+deepsearch(graph, 'A')
+
+
+#поиск в ширину
+from collections import deque
+graph = {'A': ['M', 'P'],
+         'M': ['A', 'N'],
+         'N': ['M', 'B'],
+         'P': ['A', 'B'],
+         'B': ['P', 'N']}
+
+def widthsearch(start, goal, graph):
+    queue = deque([start])
+    visited = {start: None}
+
+    while queue:
+        cur_node = queue.popleft()
+        if cur_node == goal:
+            break
+
+        next_nodes = graph[cur_node]
+        for next_node in next_nodes:
+            if next_node not in visited:
+                queue.append(next_node)
+                visited[next_node] = cur_node
+    return visited
+
+start = 'A'
+goal = 'B'
+visited = widthsearch(start,goal,graph)
+
+cur_node = goal
+print(f'Путь из {goal} в {start}')
+print(goal)
+while cur_node != start:
+    cur_node = visited[cur_node]
+    print(f'---> {cur_node}')
+    
+    
+#скобочная структура
+a = input()
+j = 0
+sch = 0
+for i in range(len(a)):
+    if j>=0:
+        if a[i] == "(":
+            j +=1
+        if a[i]==")":
+            j-=1
+
+    if j==0:
+        sch = 0
+    if j>0:     #счетчик начинает отсчет, если другой счетчик j превышает 0, и обнуляется если j снова равен 0
+        sch +=1
+
+    if j<0:     #это условие проверяет, если последовательность сломалась на )
+        print(f'Последовательность сломалась на {i+1} элементе')
+        break
+
+if sch != 0: print(f'Последовательность сломалась на {len(a) - sch + 1} элементе')
+if sch == 0: print('Последовательность верная')
